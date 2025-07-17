@@ -7,6 +7,7 @@ import type MessageResponse from "./interfaces/message-response.js";
 
 import api from "./api/index.js";
 import * as middlewares from "./middlewares.js";
+import authRoutes from "./routes/auth";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.get<object, MessageResponse>("/", (req, res) => {
 });
 
 app.use("/api/v1", api);
+app.use("/api/auth", authRoutes);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
