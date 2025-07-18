@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5433/pocdb
+    username: root
+    password: secret
+  data:
+    mongodb:
+      uri: mongodb://mongodb:27017/articles
+
+server:
+  port: 8080
+
+grpc:
+  auth-service:
+    host: ${GRPC_AUTH_SERVICE_HOST:localhost}
+    port: ${GRPC_AUTH_SERVICE_PORT:6565}  

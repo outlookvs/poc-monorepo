@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${TEST_DB_HOST:localhost}:${TEST_DB_PORT:5432}/${TEST_DB_NAME:articles}
+    username: ${TEST_DB_USER:testuser}
+    password: ${TEST_DB_PASS:testpass}
+    driver-class-name: org.postgresql.Driver
+
+  data:
+    mongodb:
+      uri: ${TEST_MONGO_URI:mongodb://localhost:27017/testdb}
+
+  jpa:
+    # Tip: hibernate.dialect is now spring.jpa.database-platform in Spring Boot.
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+grpc:
+  auth-service:
+    host: ${GRPC_AUTH_SERVICE_HOST:localhost}
+    port: ${GRPC_AUTH_SERVICE_PORT:6565}  
