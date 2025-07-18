@@ -1,6 +1,9 @@
 import app from "./app.js";
 import { env } from "./env.js";
 import { startGrpcServer } from "./grpc/validator.server";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const port = env.PORT;
 const server = app.listen(port, () => {

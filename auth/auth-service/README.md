@@ -2,6 +2,40 @@
 
 A JavaScript Express v5 starter template with sensible defaults.
 
+Sample API calls:
+
+```
+curl -X POST http://localhost:3011/api/auth/register-tenant \
+  -H "Content-Type: application/json" \
+  -d '{"tenantName": "Acme Corp"}'
+
+# output:
+{"tenantId":"670787fe-7f6d-4489-9fde-259dca0dc25c"}
+```
+
+```
+curl -X POST http://localhost:3011/api/auth/register-user \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "jane.doe@example.com",
+    "password": "strongPassword123",
+    "tenantId": "670787fe-7f6d-4489-9fde-259dca0dc25c"
+  }'
+# output:
+{"userId":"e8006410-98ab-49b3-a1d0-c5542644d58d"}
+```
+
+```
+curl -X POST http://localhost:3011/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "jane.doe@example.com",
+    "password": "strongPassword123"
+  }
+# output:
+{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlODAwNjQxMC05OGFiLTQ5YjMtYTFkMC1jNTU0MjY0NGQ1OGQiLCJ0ZW5hbnRJZCI6IjY3MDc4N2ZlLTdmNmQtNDQ4OS05ZmRlLTI1OWRjYTBkYzI1YyIsImlhdCI6MTc1Mjg0NjU5MiwiZXhwIjoxNzUyODUwMTkyfQ.FmW8rS2vVGu3U-2Lig7RRKBw6b5iCwUZDC9s6QPwMz4","user":{"email":"jane.doe@example.com","tenantName":"Acme Corp"}}
+```
+
 How to use this template:
 
 ```sh

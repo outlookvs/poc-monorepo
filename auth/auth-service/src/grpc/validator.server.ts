@@ -2,12 +2,17 @@ import * as grpc from "@grpc/grpc-js";
 import * as protoLoader from "@grpc/proto-loader";
 import path from "path";
 import { verifyToken } from "../utils/jwt";
+import {ServerUnaryCall, sendUnaryData} from "@grpc/grpc-js";
+import { TokenRequest, TokenResponse  } from "../../proto/generated/validator";
 
-const PROTO_PATH = path.join(__dirname, "../proto/validator.proto");
+
+const PROTO_PATH = path.join(__dirname, "../../proto/validator.proto");
 const packageDefinition = protoLoader.loadSync(PROTO_PATH);
 const proto = grpc.loadPackageDefinition(packageDefinition) as any;
 
-function validate(call, callback) {
+function validate(
+  call: ServerUnaryCall<TokenRequest, TokenResponse>, 
+  callback: sendUnaryData<TokenResponse>) {
   try {
     const decoded = verifyToken(call.request.token);
     callback(null, {
@@ -16,7 +21,7 @@ function validate(call, callback) {
       tenantId: decoded.tenantId,
     });
   } catch (e) {
-    callback(null, { valid: false });
+    callback(null, { valid: false, userId: '', tenantId: '' });
   }
 }
 

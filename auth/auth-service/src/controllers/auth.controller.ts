@@ -13,7 +13,8 @@ export const registerTenant = async (req: Request, res: Response) => {
     });
     res.status(201).json({ tenantId: tenant.id });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    const error = err instanceof Error ? err.message : String(err);
+    res.status(400).json({ error: error });
   }
 };
 
@@ -31,18 +32,51 @@ export const registerUser = async (req: Request, res: Response) => {
     });
     res.status(201).json({ userId: user.id });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    const error = err instanceof Error ? err.message : String(err);
+    res.status(400).json({ error: error });
   }
 };
 
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
-  const user = await prisma.user.findUnique({ where: { email } });
+  const user = await prisma.user.findUnique({
+    where: { email },
+    include: { tenant: true },
+  });
+
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return res.status(401).json({ error: "Invalid credentials" });
   }
 
+  // TypeScript knows `user` has `tenant` now
   const token = generateToken({ userId: user.id, tenantId: user.tenantId });
-  res.json({ token });
+
+  res.json({
+    token,
+    user: {
+      email: user.email,
+      tenantName: user.tenant.name,
+    },
+  });
+};
+
+export const listTenantsAndUsers = async (_req: Request, res: Response) => {
+  try {
+    const tenants = await prisma.tenant.findMany({
+      include: {
+        users: {
+          select: {
+            id: true,
+            email: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
+    res.json(tenants);
+  } catch (err: unknown) {
+    const error = err instanceof Error ? err.message : String(err);
+    res.status(500).json({ error: error });
+  }
 };

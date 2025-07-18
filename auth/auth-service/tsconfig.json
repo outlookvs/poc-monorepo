@@ -11,6 +11,8 @@
     "skipLibCheck": true
   },
   "include": [
+    "proto/**/*.ts",
+    "proto/*.proto",
     "./*.js",
     "src/**/*.ts",
     "test/**/*.ts"
